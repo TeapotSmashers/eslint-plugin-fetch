@@ -3,6 +3,11 @@ import { recommended } from './configs/recommended';
 import requireJsonContentType from './rules/require-json-content-type';
 import requireEncodedQueryParams from './rules/require-encoded-query-params';
 import requireStatusCheck from './rules/require-status-check';
+import requireTimeout from './rules/require-timeout';
+import requireJsonResponseCheck from './rules/require-json-response-check';
+import preferAsyncAwait from './rules/prefer-async-await';
+import requireErrorHandling from './rules/require-error-handling';
+import noJsonInGetRequests from './rules/no-json-in-get-requests';
 
 export const configs = {
   recommended,
@@ -12,4 +17,9 @@ export const rules = {
   'require-json-content-type': requireJsonContentType,
   'require-encoded-query-params': requireEncodedQueryParams,
   'require-status-check': requireStatusCheck,
+  'require-timeout': requireTimeout,
+  'require-json-response-check': requireJsonResponseCheck,
+  'prefer-async-await': preferAsyncAwait,
+  'require-error-handling': requireErrorHandling,
+  'no-json-in-get-requests': noJsonInGetRequests,
 };

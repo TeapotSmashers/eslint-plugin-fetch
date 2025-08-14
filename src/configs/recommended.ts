@@ -5,5 +5,10 @@ export const recommended = {
     '@teapot-smashers/fetch/require-json-content-type': 'error',
     '@teapot-smashers/fetch/require-encoded-query-params': 'error',
     '@teapot-smashers/fetch/require-status-check': 'error',
+    '@teapot-smashers/fetch/require-timeout': 'error',
+    '@teapot-smashers/fetch/require-json-response-check': 'error',
+    '@teapot-smashers/fetch/prefer-async-await': 'warn',
+    '@teapot-smashers/fetch/require-error-handling': 'error',
+    '@teapot-smashers/fetch/no-json-in-get-requests': 'error',
   },
 };
