@@ -2,6 +2,8 @@
 
 export const recommended = {
   rules: {
-    "reatom/example-rule": "error"
-  }
-}
+    '@teapot-smashers/fetch/require-json-content-type': 'error',
+    '@teapot-smashers/fetch/require-encoded-query-params': 'error',
+    '@teapot-smashers/fetch/require-status-check': 'error',
+  },
+};

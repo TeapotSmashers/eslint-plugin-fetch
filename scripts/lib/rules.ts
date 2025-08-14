@@ -25,27 +25,26 @@ export type CategoryInfo = {
 export const rules: RuleInfo[] = fs
   .readdirSync(rootDir)
   .sort()
-  .map(
-    (filename): RuleInfo | false => {
-      const filePath = path.join(rootDir, filename);
-      const name = filename.slice(0, -3);
-      const file = require(filePath).default;
-      if (!file) return false;
+  .map((filename): RuleInfo | false => {
+    const filePath = path.join(rootDir, filename);
+    const name = filename.slice(0, -3);
+    const file = require(filePath).default;
+    if (!file) return false;
 
-      const { meta } = file
+    const { meta } = file;
 
-      return {
-        filePath,
-        id: `${pluginId}/${name}`,
-        name,
-        deprecated: Boolean(meta.deprecated),
-        fixable: Boolean(meta.fixable),
-        replacedBy: [],
-        type: meta.type,
-        ...meta.docs,
-      };
-    }
-  ).filter<RuleInfo>((rule): rule is RuleInfo => Boolean(rule));
+    return {
+      filePath,
+      id: `${pluginId}/${name}`,
+      name,
+      deprecated: Boolean(meta.deprecated),
+      fixable: Boolean(meta.fixable),
+      replacedBy: [],
+      type: meta.type,
+      ...meta.docs,
+    };
+  })
+  .filter<RuleInfo>((rule): rule is RuleInfo => Boolean(rule));
 
 const ruleTypes: RuleType[] = ['suggestion', 'problem', 'layout'];
 

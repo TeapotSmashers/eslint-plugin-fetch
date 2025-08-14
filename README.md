@@ -1,54 +1,13 @@
-**forked from [mysticatea/template-eslint-plugin](https://github.com/mysticatea/template-eslint-plugin)**
+# @teapot-smashers/eslint-plugin-fetch
 
----
-
-This is a trial of [GitHub Repository Template](https://github.blog/2019-06-06-generate-new-repositories-with-repository-templates/).
-
-Please update `package.json` after you created new repository with this template.
-
-**File Structure**:
-
-- `docs/rules/` is the directory to put documentation.
-- `src/rules/` is the directory to put rule definitions.
-- `scripts/` is the directory to put development scripts.
-- `tests/` is the directory to put tests for `src/`.
-- `.eslintignore` and `.eslintrc.js` are the configuration to lint this repository.
-
-**Dependencies**:
-
-This template uses [Jest](https://jestjs.io/) and [GitHub Actions](https://github.co.jp/features/actions) for tests, as same as ESLint itself. If you want to use other tools, customize it.
-
-**Development Tools**:
-
-- `npm run add-rule foo` command adds a rule definition.
-- `npm update` command updates the following stuff by the `meta` property of rules:
-  - the header of `docs/rules/*.md`.
-  - `lib/configs/recommended.ts` file.
-  - `lib/index.ts` file.
-  - the rule table in `README.md` file.
-
-Below is an example of README.
-
----
-
-# eslint-plugin-xxxx (template)
-
-<!--
-[![npm version](https://img.shields.io/npm/v/eslint-plugin-xxxx.svg)](https://www.npmjs.com/package/eslint-plugin-xxxx)
-[![Downloads/month](https://img.shields.io/npm/dm/eslint-plugin-xxxx.svg)](http://www.npmtrends.com/eslint-plugin-xxxx)
-[![Build Status](https://travis-ci.org/mysticatea/eslint-plugin-xxxx.svg?branch=master)](https://travis-ci.org/mysticatea/eslint-plugin-xxxx)
-[![Coverage Status](https://codecov.io/gh/mysticatea/eslint-plugin-xxxx/branch/master/graph/badge.svg)](https://codecov.io/gh/mysticatea/eslint-plugin-xxxx)
-[![Dependency Status](https://david-dm.org/mysticatea/eslint-plugin-xxxx.svg)](https://david-dm.org/mysticatea/eslint-plugin-xxxx)
--->
-
-A template for ESLint plugins.
+ESLint plugin with rules to help you write better `fetch()` API calls.
 
 ## Installation
 
 Use [npm](https://www.npmjs.com/) or a compatibility tool to install.
 
-```
-$ npm install --save-dev eslint eslint-plugin-xxxx
+```bash
+npm install --save-dev eslint @teapot-smashers/eslint-plugin-fetch
 ```
 
 ### Requirements
@@ -58,49 +17,134 @@ $ npm install --save-dev eslint eslint-plugin-xxxx
 
 ## Usage
 
-Write your config file such as `.eslintrc.yml`.
+Add the plugin to your ESLint configuration file:
 
-```yml
-plugins:
-  - xxxx
-rules:
-  xxxx/example-rule: error
+### ESLint Flat Config (eslint.config.js)
+
+```js
+import fetchPlugin from '@teapot-smashers/eslint-plugin-fetch';
+
+export default [
+  {
+    plugins: {
+      fetch: fetchPlugin,
+    },
+    rules: {
+      'fetch/require-json-content-type': 'error',
+      'fetch/require-encoded-query-params': 'error',
+      'fetch/require-status-check': 'error',
+    },
+  },
+];
 ```
 
-See also [Configuring ESLint](https://eslint.org/docs/user-guide/configuring).
+### Legacy Config (.eslintrc.json)
+
+```json
+{
+  "plugins": ["@teapot-smashers/fetch"],
+  "rules": {
+    "@teapot-smashers/fetch/require-json-content-type": "error",
+    "@teapot-smashers/fetch/require-encoded-query-params": "error",
+    "@teapot-smashers/fetch/require-status-check": "error"
+  }
+}
+```
 
 ## Configs
 
-- `xxxx/recommended` ... enables the recommended rules.
+- `@teapot-smashers/fetch/recommended` - enables all rules with recommended settings
+
+### Using the Recommended Config
+
+#### ESLint Flat Config
+
+```js
+import fetchPlugin from '@teapot-smashers/eslint-plugin-fetch';
+
+export default [
+  {
+    plugins: {
+      fetch: fetchPlugin,
+    },
+    extends: ['fetch/recommended'],
+  },
+];
+```
+
+#### Legacy Config
+
+```json
+{
+  "extends": ["plugin:@teapot-smashers/fetch/recommended"]
+}
+```
 
 ## Rules
 
-<!--RULE_TABLE_BEGIN-->
+| Rule ID                                                                      | Description                                        | Fixable | Recommended |
+| :--------------------------------------------------------------------------- | :------------------------------------------------- | :------ | :---------- |
+| [require-json-content-type](./docs/rules/require-json-content-type.md)       | Require Content-Type header when sending JSON data | 🔧      | ✅          |
+| [require-encoded-query-params](./docs/rules/require-encoded-query-params.md) | Require proper encoding of query parameters        |         | ✅          |
+| [require-status-check](./docs/rules/require-status-check.md)                 | Require checking response.ok or response.status    |         | ✅          |
 
-### Stylistic Issues
+## Why This Plugin?
 
-| Rule ID                                           | Description      |     |
-| :------------------------------------------------ | :--------------- | :-: |
-| [xxxx/example-rule](./docs/rules/example-rule.md) | An example rule. | ⭐️ |
+The `fetch()` API has several gotchas that can lead to bugs and security issues:
 
-<!--RULE_TABLE_END-->
+1. **Missing Content-Type headers** - Servers may not parse JSON correctly without proper headers
+2. **Unencoded query parameters** - Can lead to injection attacks and broken URLs
+3. **No automatic error handling** - `fetch()` doesn't throw on HTTP error status codes
 
-## Semantic Versioning Policy
+This plugin helps catch these issues early in development.
 
-This plugin follows [Semantic Versioning](http://semver.org/) and [ESLint's Semantic Versioning Policy](https://github.com/eslint/eslint#semantic-versioning-policy).
+## Examples
 
-## Changelog
+### Before (Problematic Code)
 
-- [GitHub Releases]()
+```js
+// ❌ Missing Content-Type header
+fetch('/api/users', {
+  method: 'POST',
+  body: JSON.stringify({ name: 'John' }),
+});
+
+// ❌ Unencoded query parameters (security risk)
+fetch(`/api/search?q=${userInput}`);
+
+// ❌ No status check (silent failures)
+const response = await fetch('/api/data');
+const data = await response.json(); // Might fail on 404, 500, etc.
+```
+
+### After (Safe Code)
+
+```js
+// ✅ Proper Content-Type header
+fetch('/api/users', {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json',
+  },
+  body: JSON.stringify({ name: 'John' }),
+});
+
+// ✅ Properly encoded query parameters
+const params = new URLSearchParams({ q: userInput });
+fetch(`/api/search?${params}`);
+
+// ✅ Proper error handling
+const response = await fetch('/api/data');
+if (!response.ok) {
+  throw new Error(`HTTP error! status: ${response.status}`);
+}
+const data = await response.json();
+```
 
 ## Contributing
 
-Welcome your contribution!
+Contributions are welcome! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-See also [ESLint Contribution Guide](https://eslint.org/docs/developer-guide/contributing/).
+## License
 
-### Development Tools
-
-- `npm test` runs tests.
-- `npm run update` updates the package version. And it updates `src/configs/recommended.ts`, `lib/index.ts`, and `README.md`'s rule table. See also [npm version CLI command](https://docs.npmjs.com/cli/version).
-- `npm run add-rule <RULE_ID>` creates three files to add a new rule.
+MIT

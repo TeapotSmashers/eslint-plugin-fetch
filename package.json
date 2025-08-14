@@ -1,7 +1,7 @@
 {
-  "name": "eslint-plugin-xxxx",
+  "name": "@teapot-smashers/eslint-plugin-fetch",
   "version": "1.0.0",
-  "description": "",
+  "description": "ESLint plugin with rules to help you write better fetch() API calls",
   "engines": {
     "node": ">=8.10.0"
   },
@@ -51,28 +51,32 @@
   },
   "lint-staged": {
     "*.{js,ts}": [
-      "lint --fix",
-      "prettier --write"
+      "npm run fix:eslint",
+      "npm run fix:prettier"
     ],
     "*.{json,yaml,md}": [
-      "prettier --write"
+      "npm run fix:prettier"
     ]
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/???/eslint-plugin-xxxx.git"
+    "url": "git+https://github.com/TeapotSmashers/eslint-plugin-fetch.git"
   },
   "keywords": [
     "typescript",
-    "template",
+    "fetch",
+    "http",
     "eslint",
     "eslintplugin",
-    "eslint-plugin"
+    "eslint-plugin",
+    "javascript",
+    "api",
+    "web"
   ],
-  "author": "",
+  "author": "Teapot Smashers",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/???/eslint-plugin-xxxx/issues"
+    "url": "https://github.com/TeapotSmashers/eslint-plugin-fetch/issues"
   },
-  "homepage": "https://github.com/???/eslint-plugin-xxxx#readme"
+  "homepage": "https://github.com/TeapotSmashers/eslint-plugin-fetch#readme"
 }

@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2015",
-    "module": "NodeNext",
+    "target": "es2018",
+    "module": "commonjs",
     "rootDir": "src",
     "outDir": "dist",
     "declaration": false,
@@ -13,7 +13,8 @@
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "esModuleInterop": true,
-    "skipLibCheck": true
+    "skipLibCheck": true,
+    "isolatedModules": true
   },
   "ts-node": {
     "esm": true,

@@ -15,7 +15,9 @@ const addRule = () => {
 
   // Require rule type.
   if (!type) {
-    console.error('Usage: npm run add-rule <RULE_ID> <RULE_TYPE> \n\npossible <RULE_TYPE>: problem | suggestion | layout');
+    console.error(
+      'Usage: npm run add-rule <RULE_ID> <RULE_TYPE> \n\npossible <RULE_TYPE>: problem | suggestion | layout'
+    );
     process.exitCode = 1;
     return;
   }
